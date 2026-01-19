@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.onBoarding.SignUpFragment">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/signUpBackBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/locket_box_foregin_background"
+        android:padding="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/arrowleft"
+        android:stateListAnimator="@animator/button_click_scale"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ViewFlipper
+        android:id="@+id/signUpFlipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutStepEmail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/signUpTitleTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/what_s_your_email"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                app:layout_constraintBottom_toTopOf="@+id/signUpEmailEdt"
+                app:layout_constraintStart_toStartOf="@+id/signUpEmailEdt" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/signUpEmailEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_box_background"
+                android:hint="@string/email_address"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/locket_surface"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/signUpPhoneNumberBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/locket_box_background"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:stateListAnimator="@animator/button_click_scale"
+                android:text="@string/use_phone_number"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/signUpEmailEdt"
+                app:layout_constraintStart_toStartOf="@+id/signUpEmailEdt"
+                app:layout_constraintTop_toBottomOf="@+id/signUpEmailEdt" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signUpContinueBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_button_primary_background"
+                android:elevation="8dp"
+                android:letterSpacing="0"
+                android:outlineAmbientShadowColor="@color/locket_primary"
+                android:outlineSpotShadowColor="@color/locket_primary"
+                android:stateListAnimator="@animator/button_click_scale"
+                android:text="@string/continue_string"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutStepPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/passwordTitleTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/type_password_string"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                app:layout_constraintBottom_toTopOf="@+id/passwordEdt"
+                app:layout_constraintStart_toStartOf="@+id/passwordEdt" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/passwordEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_box_background"
+                android:hint="@string/password_hidden"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/locket_surface"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/passwordValidateEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_box_background"
+                android:hint="@string/password_confirm"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/locket_surface"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                app:layout_constraintEnd_toEndOf="@+id/passwordEdt"
+                app:layout_constraintStart_toStartOf="@+id/passwordEdt"
+                app:layout_constraintTop_toBottomOf="@id/passwordEdt" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/signUpPasswordRequireTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/password_require"
+                android:textColor="@color/locket_grey_dark"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/passwordValidateEdt"
+                app:layout_constraintStart_toStartOf="@+id/passwordValidateEdt"
+                app:layout_constraintTop_toBottomOf="@+id/passwordValidateEdt" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signUpNextToNameStepBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_button_primary_background"
+                android:elevation="8dp"
+                android:letterSpacing="0"
+                android:outlineAmbientShadowColor="@color/locket_primary"
+                android:outlineSpotShadowColor="@color/locket_primary"
+                android:stateListAnimator="@animator/button_click_scale"
+                android:text="@string/continue_string"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutStepName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/NameTitleTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/type_your_name"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                app:layout_constraintBottom_toTopOf="@+id/firstNameEdt"
+                app:layout_constraintStart_toStartOf="@+id/firstNameEdt" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/firstNameEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_box_background"
+                android:hint="@string/first_name"
+                android:imeOptions="actionDone"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/locket_surface"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/lastNameEdt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_box_background"
+                android:hint="@string/last_name"
+                android:imeOptions="actionDone"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:padding="18dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/locket_surface"
+                android:textCursorDrawable="@drawable/custom_cursor"
+                app:layout_constraintEnd_toEndOf="@+id/firstNameEdt"
+                app:layout_constraintStart_toStartOf="@+id/firstNameEdt"
+                app:layout_constraintTop_toBottomOf="@id/firstNameEdt" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signUpConfirmBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/locket_button_primary_background"
+                android:elevation="8dp"
+                android:letterSpacing="0"
+                android:outlineAmbientShadowColor="@color/locket_primary"
+                android:outlineSpotShadowColor="@color/locket_primary"
+                android:stateListAnimator="@animator/button_click_scale"
+                android:text="@string/confirm"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ViewFlipper>
+</androidx.constraintlayout.widget.ConstraintLayout>

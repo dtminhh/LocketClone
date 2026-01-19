@@ -1,0 +1,17 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.LocketCameraClone" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/locket_primary</item>
+        <item name="colorPrimaryVariant">@color/locket_primary_dark</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/locket_accent</item>
+        <item name="colorSecondaryVariant">@color/locket_accent</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="colorSurface">@color/locket_background</item>
+        <item name="colorOnSurface">@color/locket_surface</item>
+        <item name="android:statusBarColor">@color/locket_primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:fontFamily">@font/arialroundedmtbold</item>
+    </style>
+</resources>

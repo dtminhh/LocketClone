@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_garph"
+    app:startDestination="@id/onboardingFragment">
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.mainpack.locketcameraclone.ui.fragment.onBoarding.OnboardingFragment"
+        android:label="fragment_onboarding"
+        tools:layout="@layout/fragment_onboarding">
+        <action
+            android:id="@+id/action_onboardingFragment_to_signUpFragment2"
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/slide_in_right_navigator"
+            app:exitAnim="@anim/slide_in_left_navigator"
+            app:popEnterAnim="@anim/slide_out_left_navigator"
+            app:popExitAnim="@anim/slide_out_right_navigator" />
+        <action
+            android:id="@+id/action_onboardingFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/slide_in_right_navigator"
+            app:exitAnim="@anim/slide_in_left_navigator"
+            app:popEnterAnim="@anim/slide_out_left_navigator"
+            app:popExitAnim="@anim/slide_out_right_navigator" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.mainpack.locketcameraclone.ui.fragment.onBoarding.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_signUpFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment"
+            app:enterAnim="@anim/slide_out_left_navigator"
+            app:exitAnim="@anim/slide_out_right_navigator" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.mainpack.locketcameraclone.ui.fragment.onBoarding.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@id/action_onboardingFragment_to_signInFragment"
+            app:enterAnim="@anim/slide_in_right_navigator"
+            app:exitAnim="@anim/slide_in_left_navigator"
+            app:popEnterAnim="@anim/slide_out_left_navigator"
+            app:popExitAnim="@anim/slide_out_right_navigator" />
+        <action
+            android:id="@+id/action_signInFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment"
+            app:enterAnim="@anim/slide_out_left_navigator"
+            app:exitAnim="@anim/slide_out_right_navigator" />
+        <action
+            android:id="@+id/action_signInFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/slide_in_right_navigator"
+            app:exitAnim="@anim/slide_in_left_navigator"
+            app:popEnterAnim="@anim/slide_out_left_navigator"
+            app:popExitAnim="@anim/slide_out_right_navigator" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.mainpack.locketcameraclone.ui.fragment.mainFunc.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
+</navigation>

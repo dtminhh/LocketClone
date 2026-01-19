@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.onBoarding.OnboardingFragment">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/onBoardingImg"
+        android:layout_width="200dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/onboardingimage"
+        app:layout_constraintBottom_toTopOf="@+id/appNameTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/appNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"
+        android:drawableStart="@drawable/applogo"
+        android:drawablePadding="8dp"
+        android:gravity="center"
+        android:text="@string/appname"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/welcomeTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/welcomeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="48dp"
+        android:lineHeight="36dp"
+        android:text="@string/welcome_text"
+        android:textAlignment="center"
+        android:textColor="@color/locket_grey_dark"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/onBoardingSignUpBtn"
+        app:layout_constraintEnd_toEndOf="@+id/appNameTxt"
+        app:layout_constraintStart_toStartOf="@+id/appNameTxt" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/onBoardingSignUpBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/locket_button_primary_background"
+        android:elevation="8dp"
+        android:letterSpacing="0"
+        android:lineHeight="1dp"
+        android:outlineAmbientShadowColor="@color/locket_primary"
+        android:outlineSpotShadowColor="@color/locket_primary"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:stateListAnimator="@animator/button_click_scale"
+        android:text="@string/create_account"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/signInBtn"
+        app:layout_constraintEnd_toEndOf="@+id/welcomeTxt"
+        app:layout_constraintStart_toStartOf="@+id/welcomeTxt" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signInBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:background="@android:color/transparent"
+        android:letterSpacing="0"
+        android:stateListAnimator="@animator/button_click_scale"
+        android:text="@string/sign_in"
+        android:textAllCaps="false"
+        android:textColor="@color/locket_surface"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

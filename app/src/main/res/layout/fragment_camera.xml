@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.mainFunc.CameraFragment">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/detailProfileImg"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/locket_box_foregin_background"
+        android:padding="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/friendListBtn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/locket_box_background_more_corner"
+        android:drawableStart="@drawable/friend_icon"
+        android:paddingHorizontal="16dp"
+        android:text="@string/friend_count_sample"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/detailProfileImg"
+        app:layout_constraintEnd_toStartOf="@+id/chatImg"
+        app:layout_constraintStart_toEndOf="@+id/detailProfileImg"
+        app:layout_constraintTop_toTopOf="@+id/detailProfileImg" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/chatImg"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/locket_box_foregin_background"
+        android:padding="12dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/chat_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cameraCardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="48dp"
+        app:cardCornerRadius="48dp"
+        app:cardElevation="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/friendListBtn">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/cameraView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friendListBtn" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/openLibraryBtn"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerCrop"
+        android:src="@drawable/open_album_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/shotBtn"
+        app:layout_constraintEnd_toStartOf="@+id/shotBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shotBtn" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/shotBtn"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_shot_background"
+        app:layout_constraintBottom_toTopOf="@+id/historyTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraCardView" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/slipCameraBtn"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerCrop"
+        android:src="@drawable/flip_camera_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/shotBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/shotBtn"
+        app:layout_constraintTop_toTopOf="@+id/shotBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/historyTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:drawableEnd="@drawable/arrowdown"
+        android:text="@string/history"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
