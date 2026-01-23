@@ -17,6 +17,9 @@ import com.mainpack.locketcameraclone.ui.utils.PermissionUtils
 import com.mainpack.locketcameraclone.ui.utils.PermissionUtils.hasRequirePermission
 
 class CameraFragment : Fragment() {
+    private var lensFacing = CameraSelector.LENS_FACING_FRONT
+    private var _binding: FragmentCameraBinding? = null
+    private val binding get() = _binding!!
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permission ->
@@ -27,23 +30,29 @@ class CameraFragment : Fragment() {
             Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_SHORT).show()
         }
     }
-    private lateinit var binding: FragmentCameraBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (requireContext().hasRequirePermission()) {
-            startCamera()
-        } else {
-            requestPermissionLauncher.launch(PermissionUtils.CAMERA_PERMISSION)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCameraBinding.inflate(inflater, container, false)
+        _binding = FragmentCameraBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (requireContext().hasRequirePermission()) {
+            startCamera()
+        } else {
+            requestPermissionLauncher.launch(PermissionUtils.CAMERA_PERMISSION)
+        }
+
+        setUpListener()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun startCamera() {
@@ -56,16 +65,27 @@ class CameraFragment : Fragment() {
                 it.surfaceProvider = binding.cameraView.surfaceProvider
             }
 
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
+            val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
             try {
                 cameraProvider.unbindAll()
 
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+                cameraProvider.bindToLifecycle(viewLifecycleOwner, cameraSelector, preview)
             } catch (exc: Exception) {
                 Log.e("CameraFragment", "Use case binding failed", exc)
             }
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
 
+    private fun setUpListener() {
+        binding.apply {
+            slipCameraBtn.setOnClickListener {
+                lensFacing = if (lensFacing == CameraSelector.LENS_FACING_FRONT) {
+                    CameraSelector.LENS_FACING_BACK
+                } else {
+                    CameraSelector.LENS_FACING_FRONT
+                }
+                startCamera()
+            }
+        }
     }
 }
