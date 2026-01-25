@@ -48,6 +48,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/headerGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="64dp" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cameraCardView"
         android:layout_width="match_parent"
@@ -58,17 +65,41 @@
         app:cardElevation="0dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/friendListBtn">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerGuideLine">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/cameraView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="visible"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/friendListBtn" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/previewImg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/captionEdt"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/locket_box_background_more_corner"
+        android:hint="@string/add_text"
+        android:maxLength="24"
+        android:paddingHorizontal="12dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cameraCardView"
+        app:layout_constraintEnd_toEndOf="@+id/cameraCardView"
+        app:layout_constraintStart_toStartOf="@+id/cameraCardView" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/openLibraryBtn"
@@ -78,6 +109,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="centerCrop"
         android:src="@drawable/open_album_icon"
+        android:stateListAnimator="@animator/button_click_scale"
         app:layout_constraintBottom_toBottomOf="@+id/shotBtn"
         app:layout_constraintEnd_toStartOf="@+id/shotBtn"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,6 +121,7 @@
         android:layout_height="84dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/button_shot_background"
+        android:stateListAnimator="@animator/button_click_scale"
         app:layout_constraintBottom_toTopOf="@+id/historyTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +135,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="centerCrop"
         android:src="@drawable/flip_camera_icon"
+        android:stateListAnimator="@animator/button_click_scale"
         app:layout_constraintBottom_toBottomOf="@+id/shotBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/shotBtn"
@@ -119,4 +153,57 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/cameraGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="chatImg,friendListBtn,chatImg,openLibraryBtn,shotBtn,slipCameraBtn,historyTxt,detailProfileImg" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/previewModeBtnGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="sendBtn,cancelBtn,sendTxt,captionEdt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/sendBtn"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:background="@drawable/button_send_background"
+        android:src="@drawable/send_icon"
+        android:stateListAnimator="@animator/button_click_scale"
+        app:layout_constraintBottom_toBottomOf="@id/shotBtn"
+        app:layout_constraintEnd_toEndOf="@id/shotBtn"
+        app:layout_constraintStart_toStartOf="@id/shotBtn"
+        app:layout_constraintTop_toTopOf="@id/shotBtn" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/cancelBtn"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cancel_icon"
+        android:stateListAnimator="@animator/button_click_scale"
+        app:layout_constraintBottom_toBottomOf="@id/sendBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sendBtn" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sendTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/send_to"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

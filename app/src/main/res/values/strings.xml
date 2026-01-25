@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Rocket</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_text">Real time pictures from\nfriends, on your screen</string>
     <string name="appname">Rocket</string>
@@ -20,4 +19,6 @@
     <string name="last_name">Last name</string>
     <string name="friend_count_sample">18 friends</string>
     <string name="history">History</string>
+    <string name="add_text">Add text…</string>
+    <string name="send_to">Send to…</string>
 </resources>
