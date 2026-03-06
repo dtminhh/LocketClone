@@ -8,10 +8,9 @@ import androidx.core.content.ContextCompat
 object PermissionUtils {
     val CAMERA_PERMISSION = arrayOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO
     )
 
-    fun Context.hasRequirePermission(): Boolean {
+    fun Context.hasCameraPermission(): Boolean {
         return CAMERA_PERMISSION.all {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }

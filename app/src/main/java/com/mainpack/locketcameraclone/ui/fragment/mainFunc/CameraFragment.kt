@@ -11,51 +11,55 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.Builder
 import androidx.camera.core.ImageCapture.FLASH_MODE_OFF
 import androidx.camera.core.ImageCapture.FLASH_MODE_ON
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.mainpack.locketcameraclone.R
 import com.mainpack.locketcameraclone.databinding.FragmentCameraBinding
-import com.mainpack.locketcameraclone.ui.extension.BitmapExtension.centerCrop
-import com.mainpack.locketcameraclone.ui.extension.BitmapExtension.rotateBitmap
-import com.mainpack.locketcameraclone.ui.utils.PermissionUtils
-import com.mainpack.locketcameraclone.ui.utils.PermissionUtils.hasRequirePermission
+import com.mainpack.locketcameraclone.ui.manager.PermissionManager.CameraPermissionManager
+import com.mainpack.locketcameraclone.ui.viewmodel.CameraViewModel
+import com.mainpack.locketcameraclone.ui.viewmodel.UiState
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
-import kotlin.math.sqrt
 
+@AndroidEntryPoint
 class CameraFragment : Fragment() {
-    private var lensFacing = CameraSelector.LENS_FACING_FRONT
+    private lateinit var cameraPermissionManager: CameraPermissionManager
     private var imageCapture: ImageCapture? = null
     private var cameraProvider: ProcessCameraProvider? = null
-    private var flashMode = FLASH_MODE_OFF
     private var originalBrightness = DEFAULT_BRIGHTNESS_VALUE
-
     private var camera: Camera? = null
-    private var minZoomRatio = 1.0f
     private var oldDist: Float = 0f
     private var startZoomRatio: Float = 1f
     private var isZooming = false
-
+    private val cameraViewModel: CameraViewModel by viewModels()
+    private var currentLensFacing: Int? = null
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permission ->
-        val allGranted = permission.entries.all { it.value }
-        if (allGranted) {
-            startCamera()
-        } else {
-            Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_SHORT).show()
-        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        cameraPermissionManager = CameraPermissionManager(
+            fragment = this,
+            onCameraGranted = {
+                cameraViewModel.cameraGranted(true)
+            },
+            onCameraDenied = {
+                Toast.makeText(requireContext(),
+                    getString(R.string.permission_not_granted), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        )
     }
 
     override fun onCreateView(
@@ -68,13 +72,9 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (requireContext().hasRequirePermission()) {
-            startCamera()
-        } else {
-            requestPermissionLauncher.launch(PermissionUtils.CAMERA_PERMISSION)
-        }
-
+        cameraPermissionManager.requestCameraPermission()
         setUpListener()
+        setUpObserver()
     }
 
     override fun onDestroyView() {
@@ -83,33 +83,59 @@ class CameraFragment : Fragment() {
     }
 
     private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        binding.cameraView.post {
+            val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
-        cameraProviderFuture.addListener({
-            cameraProvider = cameraProviderFuture.get()
+            cameraProviderFuture.addListener({
+                cameraProvider = cameraProviderFuture.get()
 
-            val preview = Preview.Builder().build().also {
-                it.surfaceProvider = binding.cameraView.surfaceProvider
+                val preview = Preview.Builder().build().also {
+                    it.surfaceProvider = binding.cameraView.surfaceProvider
+                }
+
+                val currentState = cameraViewModel.cameraState.value ?: UiState()
+                val currentLens = currentState.lensFacing
+                val currentFlash = currentState.flashMode
+
+                imageCapture = Builder()
+                    .setFlashMode(currentFlash)
+                    .build()
+
+                val cameraSelector = CameraSelector.Builder().requireLensFacing(currentLens).build()
+                try {
+                    cameraProvider?.unbindAll()
+
+                    camera = cameraProvider?.bindToLifecycle(
+                        viewLifecycleOwner,
+                        cameraSelector,
+                        preview,
+                        imageCapture
+                    )
+                    observerZoomState()
+                } catch (exc: Exception) {
+                    Log.e("CameraFragment", "Use case binding failed", exc)
+                }
+            }, ContextCompat.getMainExecutor(requireContext()))
+        }
+    }
+
+    private fun setUpObserver() {
+        cameraViewModel.cameraState.observe(viewLifecycleOwner) { value ->
+            updateFlashButtonUI(value.flashMode)
+
+            imageCapture?.flashMode = value.flashMode
+
+            if (currentLensFacing != value.lensFacing) {
+                currentLensFacing = value.lensFacing
+                startCamera()
             }
-            imageCapture = Builder()
-                .setFlashMode(flashMode)
-                .build()
+        }
 
-            val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
-            try {
-                cameraProvider?.unbindAll()
-
-                camera = cameraProvider?.bindToLifecycle(
-                    viewLifecycleOwner,
-                    cameraSelector,
-                    preview,
-                    imageCapture
-                )
-                observerZoomState()
-            } catch (exc: Exception) {
-                Log.e("CameraFragment", "Use case binding failed", exc)
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
+        cameraViewModel.processedBitMap.observe(viewLifecycleOwner) { bitmap ->
+            binding.previewImg.setImageBitmap(bitmap)
+            binding.previewImg.visibility = View.VISIBLE
+            showPreviewUI()
+        }
     }
 
     private fun takePhoto() {
@@ -122,23 +148,19 @@ class CameraFragment : Fragment() {
                 override fun onCaptureSuccess(image: ImageProxy) {
                     super.onCaptureSuccess(image)
                     turnOffScreenFlash()
-                    try {
-                        val rotation = image.imageInfo.rotationDegrees
-                        val bitmap = image.toBitmap()
-                        val rotatedBitmap = rotateBitmap(bitmap, rotation, lensFacing)
-                        val viewWidth = binding.cameraView.width
-                        val viewHeight = binding.cameraView.height
-                        val croppedBitmap = centerCrop(rotatedBitmap, viewWidth, viewHeight)
+                    cameraViewModel.formatOutputImage(
+                        image,
+                        binding.cameraView.height,
+                        binding.cameraView.width,
+                        cameraViewModel.cameraState.value?.lensFacing
+                            ?: CameraSelector.LENS_FACING_BACK
+                    )
+                }
 
-                        binding.previewImg.setImageBitmap(croppedBitmap)
-                        binding.previewImg.visibility = View.VISIBLE
-                        showPreviewUI()
-                    } catch (e: java.lang.Exception) {
-                        turnOffScreenFlash()
-                        Log.e("CameraFragment", "Error converting image to bitmap", e)
-                    } finally {
-                        image.close()
-                    }
+                override fun onError(exception: ImageCaptureException) {
+                    super.onError(exception)
+                    Toast.makeText(requireContext(),
+                        getString(R.string.take_photo_error), Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -147,7 +169,8 @@ class CameraFragment : Fragment() {
     private fun setUpListener() {
         binding.apply {
             shotBtn.setOnClickListener {
-                if (lensFacing == CameraSelector.LENS_FACING_FRONT && flashMode == FLASH_MODE_ON) {
+                val currentState = cameraViewModel.cameraState.value ?: return@setOnClickListener
+                if (currentState.lensFacing == CameraSelector.LENS_FACING_FRONT && currentState.flashMode == FLASH_MODE_ON) {
                     toggleScreenFlashMode()
                     root.postDelayed({
                         takePhoto()
@@ -156,39 +179,45 @@ class CameraFragment : Fragment() {
                     takePhoto()
             }
             slipCameraBtn.setOnClickListener {
-                lensFacing = if (lensFacing == CameraSelector.LENS_FACING_FRONT) {
-                    CameraSelector.LENS_FACING_BACK
-                } else {
-                    CameraSelector.LENS_FACING_FRONT
-                }
-                startCamera()
+                cameraViewModel.toggleCamera()
             }
+
             cancelBtn.setOnClickListener {
                 showCameraUI()
             }
 
             cameraFlashBtn.setOnClickListener {
-                toggleFlashMode()
+                cameraViewModel.toggleFlash()
             }
 
             scaleValueTxt.setOnClickListener {
                 val cameraControl = camera?.cameraControl ?: return@setOnClickListener
-                val currentZoom = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0f
+                val zoomState = camera?.cameraInfo?.zoomState?.value ?: return@setOnClickListener
 
-                if (currentZoom < 1.0f) {
-                    cameraControl.setZoomRatio(1.0f)
-                } else if (currentZoom == 1.0f) {
-                    if (minZoomRatio < 1.0f) {
-                        cameraControl.setZoomRatio(minZoomRatio)
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "Máy không hỗ trợ 0.5x",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                val currentZoom = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1.0f
+                val minZoom = zoomState.minZoomRatio
+
+                val isAtx1 = currentZoom in 0.95f..1.05f
+
+                when {
+                    currentZoom < 0.95f -> {
+                        cameraControl.setZoomRatio(1.0f)
                     }
-                } else {
-                    cameraControl.setZoomRatio(1.0f)
+
+                    isAtx1 -> {
+                        if (minZoom < 1.0f)
+                            cameraControl.setZoomRatio(minZoom)
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.device_is_not_supported_0_5x),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+
+                    else -> {
+                        cameraControl.setZoomRatio(1.0f)
+                    }
                 }
             }
 
@@ -213,15 +242,12 @@ class CameraFragment : Fragment() {
                             val newDist = getFingerSpacing(event)
 
                             if (newDist > 10f) {
-                                val scale = newDist / oldDist
-
-                                val newZoom = startZoomRatio * scale
-
-                                val clampedZoom = newZoom.coerceIn(
-                                    zoomState.minZoomRatio,
-                                    zoomState.maxZoomRatio
+                                val clampedZoom = cameraViewModel.updateZoomRatio(
+                                    oldDist = oldDist,
+                                    newDist = newDist,
+                                    startZoomRatio = startZoomRatio,
+                                    zoomState = zoomState
                                 )
-
                                 cameraControl.setZoomRatio(clampedZoom)
                             }
                         }
@@ -238,15 +264,6 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun toggleFlashMode() {
-        flashMode =
-            if (flashMode == FLASH_MODE_OFF) FLASH_MODE_ON else FLASH_MODE_OFF
-
-        imageCapture?.flashMode = flashMode
-
-        updateFlashButtonUI()
-    }
-
     private fun toggleScreenFlashMode() {
         val window = requireActivity().window
         val layoutParams = window.attributes
@@ -254,7 +271,6 @@ class CameraFragment : Fragment() {
 
         layoutParams.screenBrightness = SCREEN_BRIGHTNESS_MAX
         window.attributes = layoutParams
-
         binding.screenFlashOverlay.visibility = View.VISIBLE
     }
 
@@ -267,7 +283,7 @@ class CameraFragment : Fragment() {
         binding.screenFlashOverlay.visibility = View.GONE
     }
 
-    private fun updateFlashButtonUI() {
+    private fun updateFlashButtonUI(flashMode: Int) {
         val (colorRes, iconRes) = if (flashMode == FLASH_MODE_OFF) Pair(
             R.color.white,
             R.drawable.flash
@@ -303,14 +319,12 @@ class CameraFragment : Fragment() {
         val cameraInfo = camera?.cameraInfo ?: return
 
         cameraInfo.zoomState.observe(viewLifecycleOwner) { state ->
-            minZoomRatio = state.minZoomRatio
-
             val currentZoom = state.zoomRatio
 
             val zoomText = if (currentZoom % 1.0f == 0f) {
                 "${currentZoom.toInt()}x"
             } else {
-                String.format(Locale.US, "%.1fx", currentZoom)
+                String.format(Locale.US, getString(R.string.zoom_value_format), currentZoom)
             }
             binding.scaleValueTxt.text = zoomText
         }
@@ -319,7 +333,7 @@ class CameraFragment : Fragment() {
     private fun getFingerSpacing(event: MotionEvent): Float {
         val x = event.getX(0) - event.getX(1)
         val y = event.getY(0) - event.getY(1)
-        return (sqrt(x * x + y * y))
+        return cameraViewModel.getZoomDist(x, y)
     }
 
     companion object {
