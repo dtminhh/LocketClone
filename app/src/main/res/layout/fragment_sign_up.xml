@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.onBoarding.SignUpFragment">
+    tools:context=".feature.onboarding.presentation.SignUpFragment">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/signUpBackBtn"

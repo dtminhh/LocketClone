@@ -1,4 +1,4 @@
-package com.mainpack.locketcameraclone.ui.fragment.onBoarding
+package com.mainpack.locketcameraclone.feature.onboarding.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater

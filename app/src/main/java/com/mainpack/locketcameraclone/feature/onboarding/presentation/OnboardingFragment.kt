@@ -1,4 +1,4 @@
-package com.mainpack.locketcameraclone.ui.fragment.onBoarding
+package com.mainpack.locketcameraclone.feature.onboarding.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,12 +26,12 @@ class OnboardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpListener()
-        setFragmentResultListener("SIGN_UP_RESULT") { _, bundle ->
-            val signUpSuccess = bundle.getBoolean("success")
+        setFragmentResultListener(REQUEST_KEY) { _, bundle ->
+            val signUpSuccess = bundle.getBoolean(REQUEST_RESULT)
             if (signUpSuccess) {
                 Toast.makeText(
                     context,
-                    "You've sign up, please sign in to continue",
+                    getString(R.string.you_ve_sign_up_please_sign_in_to_continue),
                     Toast.LENGTH_SHORT
                 ).show()
             }

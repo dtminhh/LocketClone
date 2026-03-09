@@ -9,7 +9,10 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class RocketApplication : Application(), CameraXConfig.Provider {
     override fun getCameraXConfig(): CameraXConfig {
-        return CameraXConfig.Builder.fromConfig(Camera2Config.defaultConfig()).setMinimumLoggingLevel(
-            Log.ERROR).build()
+        return CameraXConfig.Builder
+            .fromConfig(Camera2Config.defaultConfig())
+            .setMinimumLoggingLevel(
+                Log.ERROR
+            ).build()
     }
 }

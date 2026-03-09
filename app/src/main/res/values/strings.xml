@@ -26,4 +26,5 @@
     <string name="take_photo_error">Take photo error</string>
     <string name="device_is_not_supported_0_5x">Device  is not supported 0.5x</string>
     <string name="zoom_value_format">%.1fx</string>
+    <string name="you_ve_sign_up_please_sign_in_to_continue">You\'ve sign up, please sign in to continue</string>
 </resources>
