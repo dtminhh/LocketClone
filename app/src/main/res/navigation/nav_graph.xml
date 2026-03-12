@@ -6,7 +6,7 @@
     app:startDestination="@id/onboardingFragment">
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="com.mainpack.locketcameraclone.ui.fragment.onBoarding.OnboardingFragment"
+        android:name="com.mainpack.locketcameraclone.feature.onboarding.presentation.OnboardingFragment"
         android:label="fragment_onboarding"
         tools:layout="@layout/fragment_onboarding">
         <action
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.mainpack.locketcameraclone.ui.fragment.onBoarding.SignUpFragment"
+        android:name="com.mainpack.locketcameraclone.feature.onboarding.presentation.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.mainpack.locketcameraclone.ui.fragment.onBoarding.SignInFragment"
+        android:name="com.mainpack.locketcameraclone.feature.onboarding.presentation.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in">
         <action
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.mainpack.locketcameraclone.ui.fragment.mainFunc.CameraFragment"
+        android:name="com.mainpack.locketcameraclone.feature.camera.presentation.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
 </navigation>

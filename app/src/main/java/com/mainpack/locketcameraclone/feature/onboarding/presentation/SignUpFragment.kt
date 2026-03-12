@@ -1,4 +1,4 @@
-package com.mainpack.locketcameraclone.ui.fragment.onBoarding
+package com.mainpack.locketcameraclone.feature.onboarding.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.mainpack.locketcameraclone.R
 import com.mainpack.locketcameraclone.databinding.FragmentSignUpBinding
-import com.mainpack.locketcameraclone.ui.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,9 +47,9 @@ class SignUpFragment : Fragment() {
     }
 
     private fun setUpObserver() {
-        signUpViewModel.passwordValidation.observe(viewLifecycleOwner) { isValid ->
+        signUpViewModel.uiState.observe(viewLifecycleOwner) { state ->
             binding.apply {
-                signUpNextToNameStepBtn.isEnabled = isValid
+                signUpNextToNameStepBtn.isEnabled = state.isPasswordValid
             }
         }
     }
@@ -86,15 +85,15 @@ class SignUpFragment : Fragment() {
         binding.signUpConfirmBtn.setOnClickListener {
             findNavController().navigate(R.id.action_signUpFragment_to_onboardingFragment)
             setFragmentResult(
-                "SIGN_UP_RESULT",
-                bundleOf("success" to true)
+                REQUEST_KEY,
+                bundleOf(REQUEST_RESULT to true)
             )
         }
 
         val triggerCheck = {
             val password = binding.passwordEdt.text.toString()
             val confirmPassword = binding.passwordValidateEdt.text.toString()
-            signUpViewModel.validatePassword(password, confirmPassword)
+            signUpViewModel.onPasswordInputChanged(password, confirmPassword)
         }
         binding.passwordEdt.onTextChange { triggerCheck() }
         binding.passwordValidateEdt.onTextChange { triggerCheck() }

@@ -1,4 +1,4 @@
-package com.mainpack.locketcameraclone.ui.utils
+package com.mainpack.locketcameraclone.core.permission
 
 import android.Manifest
 import android.content.Context
@@ -8,10 +8,9 @@ import androidx.core.content.ContextCompat
 object PermissionUtils {
     val CAMERA_PERMISSION = arrayOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO
     )
 
-    fun Context.hasRequirePermission(): Boolean {
+    fun Context.hasCameraPermission(): Boolean {
         return CAMERA_PERMISSION.all {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
